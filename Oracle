@@ -1,0 +1,1226 @@
+//Scene 1 Landing-Main page
+//Welcome Screen with Instructions and Start button
+//Global Variables
+var currentScene;
+var finalResponse;
+var characterX = 353;
+var characterY = 241;
+var d = day(); 
+var m = month();
+var y = year();
+var h = hour();
+var mi = minute();
+
+//button  -Start and home
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+};
+
+//button function - Instructions
+var button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 125;
+    this.height = config.height || 45;
+    this.label = config.label || "Click";
+};
+
+// button prototype draw function - start and home
+Button.prototype.draw = function() {
+   
+    var c = color(19, 245, 19, 235);
+    fill(c);
+    var value = alpha(c);  
+
+    fill(108, 184, 70, value);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(13, 12, 13);
+    textSize(25);
+    textAlign(CENTER, TOP);
+    text(this.label, this.x+76, this.y+this.height/4);
+};
+
+//instructions
+button.prototype.draw = function() {
+      var c = color(211, 245, 19, 230);
+    fill(c);
+    var value = alpha(c);  // Sets "value" to "102"
+    fill(190, 222, 47, value);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(13, 12, 13);
+    textSize(19);
+    textAlign(CENTER, TOP);
+    text(this.label, this.x+63, this.y+this.height/4);
+};
+
+//Button Prototype mouse function
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+        
+};
+
+//Button Prototype mouse function- instructions
+button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+        
+};
+
+//sTART button
+var btn2 = new Button({
+    x: 127,
+    y: 175,
+    label: "Start"
+});
+
+//Instructions Button
+var btn1 = new button ({
+    x: 137,
+    y: 278,
+    label: "Instructions"
+});
+
+//Return Button
+var btn3 = new Button ({
+   x: 35,
+   y: 335,
+   label: "Return"
+});
+
+//Home button
+var btn4 = new Button ({
+   x: 35,
+   y: 335,
+   label: "Home"
+});
+
+//drawbitmoji function
+var drawBitmoji = function(bitmojiObject) {
+  var x = bitmojiObject.x;
+  var y = bitmojiObject.y;
+  var h = bitmojiObject.h;
+  var shirtColor = bitmojiObject.shirtColor;
+  var initials = bitmojiObject.initials;
+  
+  // Manual scaling of each element
+  var scaleMultiplier = h / 400;
+      
+      // HAIR
+      noStroke();
+      fill(201, 164, 76);
+      ellipse(x + 152 * scaleMultiplier, y + 167 * scaleMultiplier, 100 * scaleMultiplier, 280 * scaleMultiplier);
+    
+      // HEAD
+      fill(186, 119, 85);
+      ellipse(x + 198 * scaleMultiplier, y + 156 * scaleMultiplier, 158 * scaleMultiplier, 81 * scaleMultiplier);
+      rect(x + 170 * scaleMultiplier, y + 220 * scaleMultiplier, 55 * scaleMultiplier, 55 * scaleMultiplier);
+    
+      // EARRINGS
+      fill(242, 237, 237);
+      ellipse(x + 261 * scaleMultiplier, y + 169 * scaleMultiplier, 5 * scaleMultiplier, 5 * scaleMultiplier);
+      ellipse(x + 134 * scaleMultiplier, y + 169 * scaleMultiplier, 5 * scaleMultiplier, 5 * scaleMultiplier);
+    
+      // FACE
+      fill(204, 128, 90);
+      ellipse(x + 198 * scaleMultiplier, y + 150 * scaleMultiplier, 126 * scaleMultiplier, 171 * scaleMultiplier);
+
+    // EYES
+    fill(247, 242, 242);
+    ellipse(x + 170 * scaleMultiplier, y + 135 * scaleMultiplier, 30 * scaleMultiplier, 20 * scaleMultiplier);
+    ellipse(x + 222 * scaleMultiplier, y + 135 * scaleMultiplier, 30 * scaleMultiplier, 20 * scaleMultiplier);
+    
+    // EYEBROWS
+    fill(115, 77, 16);
+    arc(x + 170 * scaleMultiplier, y + 120 * scaleMultiplier, 37 * scaleMultiplier, 11 * scaleMultiplier, 180, 356);
+    arc(x + 226 * scaleMultiplier, y + 120 * scaleMultiplier, 37 * scaleMultiplier, 11 * scaleMultiplier, 180, 356);
+    
+    // EYE COLOR
+    fill(16, 116, 199);
+    ellipse(x + 170 * scaleMultiplier, y + 135 * scaleMultiplier, 17 * scaleMultiplier, 18 * scaleMultiplier);
+    ellipse(x + 222 * scaleMultiplier, y + 135 * scaleMultiplier, 17 * scaleMultiplier, 18 * scaleMultiplier);
+    
+    // EYELASHES
+    fill(38, 35, 35);
+    arc(x + 166 * scaleMultiplier, y + 129 * scaleMultiplier, 29 * scaleMultiplier, 9 * scaleMultiplier, 180, 360);
+    arc(x + 226 * scaleMultiplier, y + 129 * scaleMultiplier, 30 * scaleMultiplier, 9 * scaleMultiplier, 180, 360);
+    arc(x + 171 * scaleMultiplier, y + 143 * scaleMultiplier, 23 * scaleMultiplier, -7 * scaleMultiplier, 180, 360);
+    arc(x + 226 * scaleMultiplier, y + 143 * scaleMultiplier, 23 * scaleMultiplier, -7 * scaleMultiplier, 180, 360);
+    
+    // PUPILS
+    fill(13, 1, 1);
+    ellipse(x + 170 * scaleMultiplier, y + 135 * scaleMultiplier, 8 * scaleMultiplier, 8 * scaleMultiplier);
+    ellipse(x + 222 * scaleMultiplier, y + 135 * scaleMultiplier, 8 * scaleMultiplier, 8 * scaleMultiplier);
+    
+    // HIGHLIGHTS
+    fill(250, 240, 240);
+    ellipse(x + 165 * scaleMultiplier, y + 132 * scaleMultiplier, 8 * scaleMultiplier, 4 * scaleMultiplier);
+    ellipse(x + 218 * scaleMultiplier, y + 132 * scaleMultiplier, 8 * scaleMultiplier, 4 * scaleMultiplier);
+    
+    // MOUTH-LIPS
+    fill(240, 91, 91);
+    arc(x + 198 * scaleMultiplier, y + 191 * scaleMultiplier, 45 * scaleMultiplier, 32 * scaleMultiplier, -8, 183);
+    
+    // TEETH
+    fill(242, 242, 242);
+    ellipse(x + 198 * scaleMultiplier, y + 197 * scaleMultiplier, 31 * scaleMultiplier, -4 * scaleMultiplier);
+    
+    // NOSE
+    fill(166, 113, 87);
+    ellipse(x + 199 * scaleMultiplier, y + 173 * scaleMultiplier, 28 * scaleMultiplier, 7 * scaleMultiplier);
+    ellipse(x + 202 * scaleMultiplier, y + 155 * scaleMultiplier, 3 * scaleMultiplier, 23 * scaleMultiplier);
+    
+    // BODY
+    noStroke();
+    fill(186, 119, 85);
+    ellipse(x + 201 * scaleMultiplier, y + 329 * scaleMultiplier, 238 * scaleMultiplier, 148 * scaleMultiplier);
+    
+    // SHIRT
+    fill(shirtColor);
+    quad(
+      x + 351 * scaleMultiplier,
+      y + 400 * scaleMultiplier,
+      x + 46 * scaleMultiplier,
+      y + 400 * scaleMultiplier,
+      x + 81 * scaleMultiplier,
+      y + 309 * scaleMultiplier,
+      x + 319 * scaleMultiplier,
+      y + 309 * scaleMultiplier
+    );
+    
+    if (initials) {
+      // Draw initials on the shirt
+      fill(5, 65, 133);
+      textSize(50 * scaleMultiplier);
+      text("AMC", x + 144 * scaleMultiplier, y + 344 * scaleMultiplier);
+    }
+    
+    // UPPER BODY
+    fill(186, 119, 85);
+    ellipse(x + 200 * scaleMultiplier, y + 299 * scaleMultiplier, 54 * scaleMultiplier, 72 * scaleMultiplier);
+    
+    // ARMS
+    stroke(0, 0, 0);
+    line(x + 275 * scaleMultiplier, y + 344 * scaleMultiplier, x + 294 * scaleMultiplier, y + 400 * scaleMultiplier);
+    line(x + 120 * scaleMultiplier, y + 344 * scaleMultiplier, x + 101 * scaleMultiplier, y + 400 * scaleMultiplier);
+    noStroke();
+    fill(255, 255, 255);
+    triangle(x + 104 * scaleMultiplier, y + 400 * scaleMultiplier, x + 123 * scaleMultiplier, y + 346 * scaleMultiplier, x + 130 * scaleMultiplier, y + 400 * scaleMultiplier);
+    triangle(x + 291 * scaleMultiplier, y + 400 * scaleMultiplier, x + 271 * scaleMultiplier, y + 346 * scaleMultiplier, x + 265 * scaleMultiplier, y + 400 * scaleMultiplier);
+    
+    // TANK
+    stroke(76, 201, 22);
+    strokeWeight(10);
+    line(x + 255 * scaleMultiplier, y + 309 * scaleMultiplier, x + 254 * scaleMultiplier, y + 267 * scaleMultiplier);
+    line(x + 136 * scaleMultiplier, y + 309 * scaleMultiplier, x + 136 * scaleMultiplier, y + 270 * scaleMultiplier);
+    
+    // HAIR STRANDS
+    noStroke();
+    fill(209, 172, 71);
+    triangle(x + 159 * scaleMultiplier, y + 34 * scaleMultiplier, x + 123 * scaleMultiplier, y + 268 * scaleMultiplier, x + 152 * scaleMultiplier, y + 220 * scaleMultiplier);
+    triangle(x + 154 * scaleMultiplier, y + 51 * scaleMultiplier, x + 88 * scaleMultiplier, y + 221 * scaleMultiplier, x + 129 * scaleMultiplier, y + 179 * scaleMultiplier);
+    triangle(x + 252 * scaleMultiplier, y + 81 * scaleMultiplier, x + 218 * scaleMultiplier, y + 92 * scaleMultiplier, x + 288 * scaleMultiplier, y + 187 * scaleMultiplier);
+    triangle(x + 238 * scaleMultiplier, y + 72 * scaleMultiplier, x + 262 * scaleMultiplier, y + 157 * scaleMultiplier, x + 243 * scaleMultiplier, y + 221 * scaleMultiplier);
+    
+    // PONY
+    ellipse(x + 195 * scaleMultiplier, y + 79 * scaleMultiplier, -113 * h / 400, 41 * h / 400);
+    rect(x + 149 * scaleMultiplier, y + 48 * scaleMultiplier, 46 * h / 400, 41 * h / 400);
+    
+    // HAIR ELASTIC
+    stroke(43, 145, 14);
+    strokeWeight(3);
+    fill(39, 94, 9);
+    line(x + 151 * scaleMultiplier, y + 62 * scaleMultiplier, x + 195 * scaleMultiplier, y + 57 * scaleMultiplier);
+    
+    // NECKLACE
+    noFill();
+    strokeWeight(4);
+    stroke(201, 133, 38);
+    arc(x + 197 * scaleMultiplier, y + 271 * scaleMultiplier, 82 * h / 400, -39 * h / 400, 152, 396);
+};
+
+//Scene 2
+//Instructions page
+var drawScene2 = function() {
+//Code for Scene 2- Instructions
+currentScene = 2;//current scene 2
+background(240, 235, 240);//background coor
+textSize(35);//text size
+fill(0, 0, 0);//font color
+text("How to Play:", 10, 10, 200, 100);//text
+textSize(20);//text
+text("1. Click the Start button", 10, 100, 350, 200);
+text("2. Read the question and the 2 choices", 10, 125, 350, 200);
+text("3. Select the choice that you agree with", 10, 150, 400, 200);
+text("4. Keep chosing until your truth is revealed!", 10, 175, 400, 200);
+btn3.draw();//return button
+};
+
+//Result 1 - Sporty-Org-Intro-Out********
+var drawResult1 = function() {
+  playSound(getSound("rpg/battle-spell"));
+    finalResponse = 1;
+    background(127, 219, 88);
+    fill(18, 186, 108);
+    rect(30, 30, 350, 240);
+    noFill();
+    rect(10, 10, 340, 235);
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are the rare outgoing-introvert! Self proclaimed sporty and organized, you just may be a pisces! -Center of attention - when you want it, left alone when you don't. You always want to win. You always try your hardest, and appreciate getting credit once in a while.", 35, 35, 320, 300);
+    btn4.draw();
+  
+fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+drawBitmoji({
+  x: 215,
+  y: 200,
+  h: 200,
+  shirtColor: color(129, 196, 35),
+  initials: true
+});
+};
+
+//Result 2- Artistic- Org- Intro- Out***********
+var drawResult2 = function() {
+playSound(getSound("rpg/battle-spell"));
+
+    finalResponse = 2;
+    background(133, 88, 184);
+    fill(84, 137, 217);
+    rect(30, 30, 350, 240);
+    noFill();
+    rect(10, 10, 340, 235);
+    fill(0, 0, 0);
+    textSize(18);
+      text("You are the rare outgoing-introvert, and the even rarer organized artist! You may be a Pisces or an Aries. You enjoy doing crafts, anything art-related. You're really good at it too! You make friends easily, but mostly keep to yourself. You get your work done, and rarely complain.  ", 35, 35, 320, 300);
+      btn4.draw();
+      drawBitmoji({
+  x: 215,
+  y: 200,
+  h: 200,
+  shirtColor: color(129, 196, 35),
+  initials: true
+});
+fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+};
+
+//Scene 11 (From 6) Org/Intro/Out - FINAL
+var drawScene10 = function() {
+    currentScene = 10;// SCENE 10
+  background(7, 113, 189);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(43, 77, 227);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(255, 255, 255);//text color 1
+  text("Sporty", 25, 170, 150, 200);//text choice 1
+  fill(64, 240, 29);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(18, 18, 18);//text color- choice 2
+  text("Artistic", 200, 170, 200, 200);//text- choice 2
+    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 10 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult1();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 10 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult2();   
+   playSound(getSound("rpg/giant-yah"));
+      }
+};
+};
+
+//result 3 (from 11) Uptight-Mess-Intro-Out*********
+var drawResult3 = function() {
+    playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 2;
+    background(133, 88, 184);
+    fill(84, 137, 217);
+    rect(30, 30, 350, 240);
+    noFill();
+    rect(10, 10, 340, 235);
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are the rare outgoing-introvert! You are a confusing one, for sure. You can't seem to make up your mind. You want it all, but nothing ever seems good enough. You are stressed and overwhelmed. Take a deep breath, it will all be okay!", 35, 35, 320, 300);
+    btn4.draw();
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(189, 12, 212),
+      initials: true
+});
+fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+};
+
+//result 4 (from 11) laid back-mess-intro-out*********
+var drawResult4 = function() {
+    playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 4;
+    background(73, 189, 6);
+    fill(18, 186, 108);
+    rect(30, 30, 350, 240);
+    noFill();
+    rect(10, 10, 340, 235);
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are the rare outgoing-introvert! You have an artistic personality and go with the flow. People probably refer to you as a 'hippy' or tell you you're easy to talk to. You might be a Scorpio (:", 35, 35, 320, 300);
+    btn4.draw();
+    drawBitmoji({
+          x: 215,
+          y: 200,
+          h: 200,
+          shirtColor: color(24, 133, 16),
+          initials: true
+        });
+        fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    
+};  
+
+//Scene 12 (From 6) Mess/Intro/Out - FINAL
+var drawScene11 = function() { 
+    currentScene = 11;// SCENE 11
+  background(54, 66, 138);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(163, 8, 214);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(222, 222, 222);//text color 1
+  text("Uptight", 25, 170, 150, 200);//text choice 1
+  fill(219, 79, 184);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(0, 0, 0);//text color- choice 2
+  text("Laid-Back", 200, 170, 200, 200);//text- choice 2
+    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 11 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult3();   
+        playSound(getSound("rpg/giant-no"));
+      } else if (currentScene === 11 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult4();   
+   playSound(getSound("rpg/giant-yah"));
+      }
+};
+};
+
+//Scene 6 (From Scene 4- Intro-Outgoing)
+var drawScene6 = function() {
+    currentScene = 6;// SCENE 6
+  background(147, 84, 199);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(212, 59, 207);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(0, 0, 0);//text color 1
+  text("Organized", 25, 170, 150, 200);//text choice 1
+  fill(2, 150, 158);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(237, 237, 237);//text color- choice 2
+  text("Messy/Artistic", 200, 170, 200, 200);//text- choice 2
+   
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 6 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawScene10();  
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 6 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawScene11();
+   playSound(getSound("rpg/giant-no"));
+   
+      }};
+    
+};
+
+//Result 5 (from 12) Conf-Org-Intro-Shy**********
+var drawResult5 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 5;
+    background(49, 120, 25);
+    fill(18, 186, 108);
+     rect(30, 30, 350, 240);
+    noFill();
+    rect(10, 10, 340, 235);
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are a very independant person. You take pride in your work. You probably arrive to work 20 minutes early everyday. You are very routine, and you don't like when people mess up your 'stuff'. You could be a taurus. ", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(25, 209, 163),
+      initials: true
+});
+};
+
+//Result 6 (from 12) Self-Org-Intro-Shy**********
+var drawResult6 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 6;//Response number
+    background(71, 68, 63);//background color
+    fill(95, 110, 176);//rectangle response color
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);//font color
+    textSize(18);//font size
+    text("You are a very strong and independant person. You have so much more to offer, if you just speak up! You want people to take you seriously, but that's only going to happen once you take yourself seriously first! You can do it! ", 35, 35, 320, 300);//response
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    
+    drawBitmoji({ //draw bitmoji object
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(91, 173, 14),
+      initials: true
+});
+};
+
+//Scene 12 (from 7) Org/Intro/Shy - FINAL
+var drawScene12 = function() {
+    currentScene = 12;// SCENE 12
+  background(80, 76, 102);//Background color
+   textSize(28);
+   fill(235, 230, 230);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(49, 59, 99);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(237, 237, 237);//text color 1
+  text("Confident", 25, 170, 150, 200);//text choice 1
+  fill(2, 150, 158);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(3, 3, 3);//text color- choice 2
+  text("Self-Conscious", 200, 170, 200, 200);//text- choice 2
+    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 12 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult5();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 12 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult6();   
+   playSound(getSound("rpg/giant-no"));
+      }
+};
+  
+};
+
+//Result 7 (from 13) Uptight-Mess-Intro-Shy*********
+var drawResult7 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 7;
+    background(94, 86, 94);
+    fill(89, 179, 137);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are one confusing person. You don't like many people. You probably hate this right now, and are rolling your eyes as you read this. Sorry! Are you a Gemini? ;) ", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(168, 116, 181),
+      initials: true
+});
+};
+
+//Result 8 (from 13) Laid-Mess-Intro-Shy*********
+var drawResult8 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 8;
+  background(86, 86, 92);
+     fill(148, 181, 166);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are a go with the flow fo sho type person. You are very artistic, and in tune with nature. Maybe a little bit of a hippy. You might be a leo/virgo", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+     drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(58, 101, 133),
+      initials: true
+});
+};
+
+//Scene 13 (from 7) Mess/Intro/Shy - FINAL
+var drawScene13 = function() {
+    currentScene = 13;// SCENE 13
+  background(93, 138, 102);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(22, 138, 92);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(13, 13, 13);//text color 1
+  text("Uptight", 25, 170, 150, 200);//text choice 1
+  fill(84, 143, 66);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(237, 237, 237);//text color- choice 2
+  text("Laid back", 200, 170, 200, 200);//text- choice 2
+    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 13 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult7();   
+        playSound(getSound("rpg/giant-no"));
+      } else if (currentScene === 13 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult8();  
+   playSound(getSound("rpg/giant-yah"));
+      }
+};
+};
+
+//Scene 7 (From Scene 4- Intro-Shy)
+var drawScene7 = function() {
+    currentScene = 7;// SCENE 7
+  background(86, 56, 235);//Background color
+   textSize(30);
+   fill(255, 255, 255);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(49, 59, 99);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(237, 237, 237);//text color 1
+  text("Organized", 25, 170, 150, 200);//text choice 1
+  fill(2, 150, 158);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(13, 13, 13);//text color- choice 2
+  text("Messy/Artistic", 201, 170, 200, 200);//text- choice 2
+  
+      mouseClicked = function() {
+    if (currentScene === 7 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawScene12();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 7 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawScene13();   
+   playSound(getSound("rpg/giant-no"));
+      }};
+    
+};
+
+//Result 9 (from 14) ProbSolv-Sport-Extro-Leader*******
+var drawResult9 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 9;
+    background(143, 176, 141);
+    fill(188, 214, 102);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are a champion! You love to win and love the spotlight. Everyone always turns to you for help, but no ones there when you need it. Not that you need any help of course... because you also would never admit that. You're probably a taurus/Cancer ", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(201, 114, 146),
+      initials: true
+});
+};
+
+//Result 10 (from 14) ProbStart-Sport-Extro-Leader*******
+var drawResult10 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 10;
+    background(133, 118, 133);
+    fill(194, 222, 109);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are very competetive, and will do whatever it takes to win, even if it means cut corners! You are so confident that people call you cocky. You may seem to have it all, but remember, its best to stay humble! You might be a pisces! ", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(107, 72, 163),
+      initials: true
+});
+};
+
+//Scene 14 (from 8) Sporty-Extro-Leader - FINAL
+var drawScene14 = function() {
+    currentScene = 14;// SCENE 14
+  background(187, 79, 245);//Background color
+   textSize(30);
+  text("Do you consider yourself a:", 10, 10, 400, 100);//Question 2
+  fill(105, 109, 191);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(237, 237, 237);//text color 1
+  text("Problem Solver", 25, 170, 150, 200);//text choice 1
+  fill(222, 4, 4);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(0, 0, 0);//text color- choice 2
+  text("Problem starter", 200, 170, 200, 200);//text- choice 2
+    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 14 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult9();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 14 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult10();   
+   playSound(getSound("rpg/giant-no"));
+      }
+};
+};
+
+//Result 11 (from 15) Uptight-Art-Ext-Lead
+var drawResult11 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 11;
+  background(25, 156, 108);
+    fill(74, 194, 188);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are a perfectionist. If it's not perfect, you hate it. You want to impress everyone and you want to be noticed. People already notice you; people look up to you. You might be a scorpio or gemini", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+        drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(144, 212, 204),
+      initials: true
+});
+};
+
+//Result 12 (from 15) Laid-Art-Ext-Lead
+var drawResult12 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 12;
+    background(71, 126, 173);
+    fill(125, 209, 170);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are fun to be around! Everyone loves to be around you! You tend to be given control of situations, but never present yourself as the leader. You have TONS of hobbies and interests. You have tons of friends. You are probably a cancer :) (Or any of the horoscopes compabitble with) ", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(73, 161, 130),
+      initials: true
+});
+};
+
+//Scene 15 (from 8) Artistic-Extro Leader - FINAL
+var drawScene15 = function() {
+    currentScene = 15;// SCENE 15
+  background(87, 67, 50);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(255, 91, 15);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(242, 237, 242);//text color 1
+  text("Uptight", 25, 170, 150, 200);//text choice 1
+  fill(191, 255, 43);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(13, 13, 13);//text color- choice 2
+  text("Laid back", 200, 170, 200, 200);//text- choice 2
+    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 15 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult11();   
+        playSound(getSound("rpg/giant-no"));
+      } else if (currentScene === 15 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult12();   
+   playSound(getSound("rpg/giant-yah"));
+      }
+};
+};
+
+//Scene 8 (From Scene 5- Extro-Leader)
+var drawScene8 = function() {
+    currentScene = 8;// SCENE 8
+  background(59, 56, 59);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(50, 88, 227);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(10, 10, 10);//text color 1
+  text("Sporty", 25, 170, 150, 200);//text choice 1
+  fill(21, 191, 114);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(237, 237, 237);//text color- choice 2
+  text("Artistic", 200, 170, 200, 200);//text- choice 2
+  
+      mouseClicked = function() {
+    if (currentScene === 8 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawScene14();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 8 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawScene15();   
+   playSound(getSound("rpg/giant-yah"));
+      }};
+};
+
+//Result 13 (from 16) RuleF-Org-Ext-Follow********
+var drawResult13 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 13;
+    background(140, 123, 140);
+    fill(58, 86, 196);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are a clean cut, genuine person. You won't take control of a situation, but you will help in any way you can. You are always prepared, and get to work/school early. You might be a Virgo or Capricorn.", 35, 35, 320, 300);
+    btn4.draw();
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(209, 117, 207),
+      initials: true
+});
+fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+};
+
+//Result 14 (from 16) RuleB-Org-Ext-Follow********
+var drawResult14 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 14;
+    background(17, 115, 130); 
+    fill(44, 158, 50);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 345, 242);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You get yourself into trouble a lot for being in the wrong place and wrong time. You make friends easily, but sometimes with the wrong people, because you see the best in everyone. You're too smart to let others bring you down! You think you're a rebel but you're a follower, & influenced by someone else.            You might be: Scorpio/Aquarius", 35, 35, 340, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(107, 72, 163),
+      initials: true
+});
+};
+
+//Scene 16 (from 9) Org-Extr-Follow - FINAL
+var drawScene16 = function() {
+    currentScene = 16;// SCENE 16
+  background(211, 242, 8);//Background color
+   textSize(30);
+   fill(20, 19, 19);//font color
+  text("Do you consider yourself a:", 10, 10, 400, 100);//Question 2
+  fill(22, 247, 78);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(0, 0, 0);//text color 1
+  text("Rule", 15, 170, 150, 200);//text choice 1
+  text("Follower", 15, 200, 150, 200);//text choice 1
+  fill(222, 27, 27);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(255, 255, 255);//text color- choice 2
+  text("Rule Breaker", 200, 170, 200, 200);//text- choice 2
+  text("Or Bender", 200, 200, 200, 200);//text- choice 2    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 16 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult13();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 16 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult14();   
+   playSound(getSound("rpg/giant-no"));
+      }
+};
+  
+};
+
+//Result 15 (from 17) Conf-Mess-Ext-Follow******
+var drawResult15 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 15;
+  background(29, 130, 57);
+      fill(18, 186, 108);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You have a strong personality and are easily influenced. You are very stubborn, but you love with all your heart. You are artistic and creative. Leos are known for their confidence, outgoing nature, and theatrical personality. You might be a Leo!", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(207, 72, 180),
+      initials: true
+});
+};
+
+//Result 16 (from 17) Self-Mess-Ext-Follow******
+var drawResult16 = function() {
+     playSound(getSound("rpg/battle-spell"));//sound effect
+    finalResponse = 16;
+    background(91, 87, 107);    
+    fill(82, 162, 212);
+    rect(30, 30, 350, 240);//rectangle shape
+    noFill();
+    rect(10, 10, 340, 235);//design rectangle
+    fill(0, 0, 0);
+    textSize(18);
+    text("You are so much better than you give yourself credit for! You have been waiting to hear someone say that for a long time! You have natural talent, don't let it go to waste!  Cancers are known to be self-conscious and artistic, and they are also extroverted and followers. You may be a Cancer!", 35, 35, 320, 300);
+    btn4.draw();
+    fill(156, 0, 0);
+textSize(20);
+text("Fate Revealed on:", 150, 280);
+text(m + "/" + d + "/" + y, 150, 300);//date
+    textFont(createFont("monospace", 20), 20);
+     text(h + ":" + mi, 150, 320);//time
+    drawBitmoji({
+      x: 215,
+      y: 200,
+      h: 200,
+      shirtColor: color(107, 45, 207),
+      initials: true
+});
+};
+
+//Scene 17 (from 9) Mess-Extr-Follow - FINAL
+var drawScene17 = function() {
+currentScene = 17;// SCENE 17
+  background(181, 96, 174);//Background color
+   textSize(29);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(240, 29, 29);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(3, 3, 3);//text color 1
+  text("Confident", 25, 170, 150, 200);//text choice 1
+  fill(85, 162, 235);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(237, 237, 237);//text color- choice 2
+  text("Self-Conscious", 201, 170, 200, 200);//text- choice 2
+    
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 17 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawResult15();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 17 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawResult16();   
+   playSound(getSound("rpg/giant-no"));
+      }
+};
+  
+};
+
+//Scene 9 (From Scene 5-Extro-Follower)
+var drawScene9 = function() {
+    currentScene = 9;// SCENE 9
+  background(33, 129, 138);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(92, 122, 219);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(3, 3, 3);//text color 1
+  text("Organized", 20, 170, 150, 200);//text choice 1
+  fill(7, 53, 99);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(237, 237, 237);//text color- choice 2
+  text(" Messy  'Artistic'", 202, 170, 200, 200);//text- choice 2
+  
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 9 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawScene16();   
+        playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 9 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawScene17();  
+   playSound(getSound("rpg/giant-no"));
+      }
+};
+};
+
+//Scene 4 - INTROVERT
+var drawScene4 = function() {
+    currentScene = 4;// SCENE 4
+  background(97, 62, 95);//Background color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 2
+  fill(245, 54, 95);//rect color choice 1
+  rect(1, 100, 198, 200);//choice 1 selection
+  fill(237, 237, 237);//text color 1
+  text("Outgoing", 25, 170, 150, 200);//text choice 1
+  fill(217, 150, 230);//rect choice 2 color
+  rect(200, 100, 198, 200);//choice 2- shy selection
+  fill(0, 0, 0);//text color- choice 2
+  text("Shy", 200, 170, 200, 200);//text- choice 2
+  
+  //Selection
+  mouseClicked = function() {
+    if (currentScene === 4 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawScene6();   
+         playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 4 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawScene7();  
+   playSound(getSound("rpg/giant-no"));
+      }
+};
+};
+
+//Scene 5 EXTROVERT QUESTION
+var drawScene5 = function() {
+    currentScene = 5;// SCENE 5
+  background(61, 82, 112);//Background Color
+   textSize(30);
+  text("Do you consider yourself:", 10, 10, 400, 100);//Question 3
+  fill(71, 163, 186);//rect color choice 1
+  rect(1, 100, 198, 200);//Leader selection 1
+  fill(8, 8, 8);//text color 1
+  text("Leader", 25, 170, 150, 200);//text choice 1
+  fill(84, 96, 191);//rect color choice 2
+  rect(200, 100, 198, 200);//Follower selection 2
+  fill(237, 237, 237);//text color 2
+  text("Follower", 200, 170, 200, 200);//text choice 2
+  
+    //Selection
+  mouseClicked = function() {
+    if (currentScene === 5 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawScene8();   
+         playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 5 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawScene9();   
+    playSound(getSound("rpg/giant-no"));
+      }
+};
+};
+
+//SCENE 3
+//GAME SCENE 1
+var drawScene3 = function() {
+    currentScene = 3;// current scene 3 - game screen
+  //code for Scene 3- Game
+  background(5, 107, 9);//background color
+  textSize(30);
+  text("Do you consider yourself an:", 10, 10, 400, 100);//Question 1
+  fill(152, 186, 0);//rect color introvert
+  rect(1, 100, 198, 200);//introvert selection
+  fill(18, 18, 18);//text color
+  text("Introvert", 25, 170, 150, 200);//text- introvert
+  fill(27, 181, 4);//rect extrovert color
+  rect(200, 100, 198, 200);//extrovert selection
+  fill(237, 237, 237);//text color
+  text("Extrovert", 200, 170, 200, 200);//text- extrovert
+  
+
+mouseClicked = function() {
+    if (currentScene === 3 && mouseX > 1 && mouseX < 199 && mouseY > 100 && mouseY < 300) {
+        drawScene4();   
+         playSound(getSound("rpg/giant-yah"));
+      } else if (currentScene === 3 && mouseX > 200 && mouseX < 398 && mouseY > 100 && mouseY < 300) {
+   drawScene5();   
+    playSound(getSound("rpg/giant-yah"));
+      }
+};
+};
+
+//Draw Scene 1 function HOME SCREEN
+var drawScene1 = function() {
+    currentScene = 1;
+    background(16, 113, 161);
+    stroke(255, 255, 255);
+//color gradiant for background
+var from = color(15, 161, 141);//from color (22, 200, 227)(left)-color 1
+var to = color(64, 95, 135);//to color (27, 41, 145) (right)-color 5
+var interA = lerpColor(from, to, 0.33);//Color 2
+var interB = lerpColor(from, to, 0.66);//color 3
+var interC = lerpColor(from, to, 0.99);//color 4
+
+
+fill(from);//color 1
+rect(0, 0, 105, 400);//rect1/left
+
+fill(interA);//color 2
+rect(80, 0, 105, 400);//rect2
+
+fill(interB);//color 3
+rect(160, 0, 128, 400);//rect3
+
+fill(interC);//color 4
+rect(240, 0, 100, 400);//rect4
+
+fill(to);//color 5
+rect(320, 0, 100, 400);//rect 5
+
+  stroke(196, 171, 12);
+    strokeWeight(2);
+    noFill();
+    ellipse(25, 30, 360, 360);//top left
+    ellipse(375, 30, 360, 360);//top right
+    ellipse(200, 200, 375, 375);//middle
+    ellipse(25, 375, 360, 360);//bottom left corner
+    ellipse(375, 375, 360, 360);//bottom right
+
+    //Title
+    var c = color(9, 78, 148, 200);
+    fill(c);
+    var value = alpha(c);  
+    fill(29, 126, 133, value);
+    rect(75, 35, 250, 80);
+    fill(237, 223, 237);
+    stroke(12, 102, 21);
+    textSize(35);
+    text("Madam Alicia's", 83, 41, 400, 100);
+    textSize(30);
+    text("Oracle of Truth", 90, 80, 400, 100);
+
+noStroke();
+
+    //Stars
+    var x = -66;
+    while (x < 298) {//while loop (:
+        
+        x+=78; 
+        var y = -6;
+    while (y < 336) {
+        image(getImage("space/star"), x, y, 50, 50);
+        y+=111; 
+    }
+    }
+    //Draw Start button
+btn2.draw();
+//Draw Instructions Button
+btn1.draw();
+mouseClicked = function() {
+    if (btn1.isMouseInside()) {
+        drawScene2();
+        playSound(getSound("retro/coin"));
+    } else if (btn2.isMouseInside()) {
+        drawScene3();
+        playSound(getSound("rpg/giant-hyah"));
+    }
+    else if (btn3.isMouseInside()) {
+        drawScene1();
+        playSound(getSound("retro/coin"));
+    }
+};
+
+};
+
+mousePressed = function () {
+        if (btn4.isMouseInside()) {
+        drawScene1();
+        }
+
+};
+
+//Main Screen
+
+drawScene1();
+
+
